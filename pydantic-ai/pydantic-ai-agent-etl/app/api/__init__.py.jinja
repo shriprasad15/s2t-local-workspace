@@ -1,0 +1,9 @@
+from fastapi import APIRouter
+
+{% if with_mcp %}from .mcp import router as mcp_router{% endif %}
+from .v1 import v1_router
+
+router = APIRouter()
+router.include_router(v1_router, prefix="/api/v1")
+{% if with_mcp %}router.include_router(mcp_router){% endif %}
+__all__ = ["router"]

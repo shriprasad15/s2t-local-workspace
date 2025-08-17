@@ -1,0 +1,31 @@
+## azure-pipelines.yml
+
+trigger:
+  - main
+  - dev
+  
+variables: 
+  AzureSubscription: 'S2T Sela'    # Change this according to the naming convention S2T Sela-<Project Name>
+  KeyVaultName: 'predicintel-devops-kv'
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: Cybersmart-Next/template
+
+extends:
+  template: project-pipelines.yml@template
+  parameters:
+    registryHybrid: false
+    DockerFiles:
+# You can repeat following block, if you have many Dockerfiles in the same git repository.
+      - registryUrl: 'cybersmartstg.azurecr.io/cybersmart-next/fastapi-boilerplate' # Change this
+        file: '$(Build.SourcesDirectory)/Dockerfile' # Change this or remove. Default Dockerfile in root directory
+        displayName: 'Build Main Docker Image' # Change this or remove. Default 'Build Docker Image'
+        context: '$(Build.SourcesDirectory)/' # Change this or remove. Default '$(Build.SourcesDirectory)/'
+        jobName: job1
+    DevRegistries:
+      - registryUrl: 'cybersmartstg.azurecr.io/cybersmart-next/fastapi-boilerplate' # Change this
+    UATRegistries:
+      - registryUrl: 'cybersmartstg.azurecr.io/cybersmart-next/fastapi-boilerplate' # Change this

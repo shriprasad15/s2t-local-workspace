@@ -1,0 +1,7 @@
+dependencies:
+  fastapi-boilerplate:
+    depends_on:
+    - kafka
+  kafka:
+    url: kafka.default.svc.cluster.local:9092
+

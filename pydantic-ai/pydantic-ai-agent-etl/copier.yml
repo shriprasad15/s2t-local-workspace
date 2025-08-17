@@ -1,0 +1,39 @@
+# Project options
+team_project:
+  type: str
+  help: |
+    The name of the Azure DevOps project where the pipelines will be created.
+    This is the name of the project, not the organization , not the name of the repository.
+    For example, if the URL of your project is https://dev.azure.com/predictintel/cybersmart-next,
+    the value of this variable should be "cybersmart-next".
+
+project_name:
+  type: str
+  help: "What is your project name"
+
+with_mcp:
+  type: bool
+  help: "Do you need built-in MCP server?"
+  default: no
+
+_message_after_copy: |
+  Your project "{{ project_name }}" has been created successfully!
+
+  Next steps:
+  1. cd {{ project_name }}
+  2. Read the README.md file and update it with your project information
+  3. Run 'python -m venv venv' to create a virtual environment and activate it
+  4. Run 'pip install -r requirements.txt' to install the project dependencies
+  5. Start coding!
+
+_message_after_update: |
+  Your project "{{ project_name }}" has been updated successfully!
+  In case there are any conflicts, please resolve them. Then,
+  you're done.
+
+_tasks:
+  # OS-specific task (supported values are "linux", "macos", "windows" and `None`)
+  - command: find docs -type f -name "*.md" ! -name "Readme.md" -exec rm {} +
+    when: "{{ _copier_conf.os in  ['linux', 'macos'] }}"
+  - command: for %i in (docs\*.md) do @if /i not "%~nxi"=="Readme.md" del "%i"
+    when: "{{ _copier_conf.os == 'windows' }}"

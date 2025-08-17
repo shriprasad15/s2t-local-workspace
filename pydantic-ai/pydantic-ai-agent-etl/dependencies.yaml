@@ -1,0 +1,13 @@
+dependencies:
+  redis:
+    url: redis://redis.cyber.svc.cluster.local:6379/0
+  kafka:
+    url: kafka.default.svc.cluster.local:9092
+app:
+  env:
+    FASTSTREAM_PROVIDER: ${dependencies.kafka.url}
+    FASTSTREAM_ENABLE: 'FALSE'
+    SAQ_ENABLE: 'TRUE'
+    REDIS_URL: ${dependencies.redis.url}
+    SAQ_WEB_PORT: '8081'
+    SAQ_WORKERS: '1'
